@@ -1,0 +1,39 @@
+{
+  "name": "evichain-react",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "dev:frontend": "vite --host",
+    "dev:backend": "npm --prefix \"evichain-backend/evichain-backend\" run dev",
+    "dev:full": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "install:backend": "npm --prefix \"evichain-backend/evichain-backend\" install",
+    "compile:backend": "npm --prefix \"evichain-backend/evichain-backend\" run compile",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "vite": "^8.0.4"
+  }
+}

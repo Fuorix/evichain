@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EviChain CID Lookup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Geist', sans-serif;
+            background: radial-gradient(circle at 0% 0%, #d8e3fb 0%, #f7f9fb 50%, #dbe4e2 100%);
+            min-height: 100vh;
+        }
+        .glass-edge {
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 20px 40px rgba(0, 0, 0, 0.04);
+        }
+        .search-glow:focus-within {
+            box-shadow: 0 0 0 4px rgba(9, 20, 38, 0.05), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#dbe4e2",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#bcc7de",
+                      "surface-container-high": "#e6e8ea",
+                      "primary-fixed": "#d8e3fb",
+                      "primary-container": "#1e293b",
+                      "on-secondary-container": "#007165",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed": "#62fae3",
+                      "on-tertiary-fixed": "#151d1c",
+                      "surface-bright": "#f7f9fb",
+                      "secondary-container": "#62fae3",
+                      "outline-variant": "#c5c6cd",
+                      "outline": "#75777d",
+                      "inverse-surface": "#2d3133",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#222a29",
+                      "tertiary": "#0d1614",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-surface-variant": "#45474c",
+                      "on-error": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-container-highest": "#e0e3e5",
+                      "secondary-fixed-dim": "#3cddc7",
+                      "surface": "#f7f9fb",
+                      "on-surface": "#191c1e",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#88918f",
+                      "on-tertiary-fixed-variant": "#404947",
+                      "on-primary-fixed": "#111c2d",
+                      "surface-tint": "#545f73",
+                      "surface-variant": "#e0e3e5",
+                      "on-background": "#191c1e",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#d8dadc",
+                      "background": "#f7f9fb",
+                      "secondary": "#006b5f",
+                      "primary-fixed-dim": "#bcc7de",
+                      "primary": "#091426",
+                      "on-primary-container": "#8590a6",
+                      "tertiary-fixed-dim": "#bfc8c6",
+                      "surface-container": "#eceef0",
+                      "on-secondary-fixed-variant": "#005047",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#00201c",
+                      "on-primary-fixed-variant": "#3c475a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-margin": "3rem",
+                      "container-padding": "2rem",
+                      "card-gap": "1rem",
+                      "gutter": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Geist"],
+                      "body-lg": ["Geist"],
+                      "label-caps": ["Geist"],
+                      "title-md": ["Geist"],
+                      "display-lg": ["Geist"],
+                      "body-sm": ["Geist"],
+                      "headline-lg-mobile": ["Geist"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="flex overflow-hidden">
+<!-- SideNavBar Component (Shared) -->
+<aside class="h-screen w-72 rounded-r-lg sticky left-0 top-0 bg-surface-container-lowest/60 backdrop-blur-xl border-r border-white/20 shadow-2xl shadow-black/5 flex flex-col p-gutter justify-between z-50">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col">
+<span class="text-title-md font-bold tracking-tight text-primary">EviChain</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant opacity-60">FORENSIC SUITE</span>
+</div>
+<button class="bg-primary text-on-primary rounded-full py-4 px-6 flex items-center justify-center gap-2 scale-95 active:scale-90 transition-transform shadow-lg">
+<span class="material-symbols-outlined text-body-lg">add</span>
+<span class="font-title-md text-body-sm">New Investigation</span>
+</button>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-body-sm font-body-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">folder_managed</span>
+<span class="text-body-sm font-body-sm">Evidence Records</span>
+</a>
+<!-- Active Tab: CID Lookup -->
+<a class="flex items-center gap-4 px-4 py-3 bg-surface-container-lowest text-primary shadow-sm rounded-full font-bold" href="#">
+<span class="material-symbols-outlined">fingerprint</span>
+<span class="text-body-sm font-body-sm">CID Lookup</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-body-sm font-body-sm">Integrity Tool</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-body-sm font-body-sm">Chain History</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-body-sm font-body-sm">Settings</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-body-sm font-body-sm">Help</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-primary transition-colors duration-300 hover:bg-white/40 rounded-full" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-body-sm font-body-sm">Logout</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-4 py-2 bg-white/30 rounded-2xl border border-white/40">
+<img alt="Lead Investigator Avatar" class="w-8 h-8 rounded-full border border-white" data-alt="A professional close-up portrait of a senior digital forensic investigator in a clean, high-key studio setting. The investigator has a sharp, focused expression, wearing a tailored navy blazer. The lighting is soft and editorial, characteristic of a premium tech publication, using cool blue and clean white tones to reflect the EviChain brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4b7LF3TlIZVbuxN_d4eW6hfnMm8ahCt0c9WrDyMypXKdZVfbnwYPq8Tfn0GZd14Ofl-D-GFKsgDInRLoF0gzZVixcKWtuBhwUTzRTcUtc5Ch1HUZqX0ewDPtRu8uVL3RmqYUKircb9-HfSubNVEENWU3nlk9_TPrev6QQTVCF8arisJWUuzg76-KwyihIWv-lINxULtTZCHcYKLdjai49o4ggg9KYcNGs7VzlDIJwl4vwcEVSQOBxQFmSzjGaCg4lDScSGOYmhFU"/>
+<div class="flex flex-col overflow-hidden">
+<span class="text-body-sm font-bold text-primary truncate">Agent Miller</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Lead Forensic</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 h-screen overflow-y-auto relative px-section-margin py-gutter">
+<!-- TopNavBar (Shared) -->
+<header class="rounded-full bg-surface-container-lowest/40 backdrop-blur-md border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.03)] flex justify-between items-center px-8 py-3 w-full mb-12">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined">search</span>
+<span class="text-body-sm font-medium">Quick Find</span>
+</div>
+<nav class="flex gap-6">
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-opacity" href="#">OVERVIEW</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-opacity" href="#">ANALYTICS</a>
+<a class="text-label-caps font-label-caps text-on-surface-variant hover:text-primary transition-opacity" href="#">REPORTS</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">settings</button>
+</div>
+</header>
+<!-- CID Lookup Core Interface -->
+<section class="max-w-5xl mx-auto flex flex-col gap-12">
+<!-- Hero / Header -->
+<div class="flex flex-col gap-4 text-center">
+<h1 class="font-display-lg text-display-lg text-primary">CID Registry Lookup</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                    Verify the cryptographic integrity of any file, transaction, or evidence block across the forensic distributed ledger.
+                </p>
+</div>
+<!-- Search Bar Section -->
+<div class="relative group">
+<div class="bg-surface-container-lowest/70 backdrop-blur-3xl p-8 rounded-xl glass-edge border border-white/40 search-glow transition-all duration-500">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-6 text-primary scale-125">fingerprint</span>
+<input class="w-full pl-16 pr-48 py-8 bg-white/40 border-none rounded-2xl text-title-md font-body-lg text-primary focus:ring-0 placeholder:text-on-surface-variant/40 placeholder:font-light" placeholder="Enter Content Identifier (CID) or Transaction Hash..." type="text"/>
+<button class="absolute right-4 bg-primary text-on-primary px-8 py-4 rounded-xl font-title-md text-body-sm hover:opacity-90 transition-all active:scale-95 shadow-lg">
+                            Analyze CID
+                        </button>
+</div>
+<div class="mt-6 flex gap-4 items-center">
+<span class="text-label-caps font-label-caps text-on-surface-variant">AUTO-FILTERS:</span>
+<div class="flex gap-2">
+<span class="px-4 py-1.5 bg-secondary/10 text-secondary border border-secondary/20 rounded-full text-[12px] font-bold">Metadata Validation</span>
+<span class="px-4 py-1.5 bg-primary-fixed text-primary border border-primary/10 rounded-full text-[12px] font-bold">SHA-256 Deep Scan</span>
+<span class="px-4 py-1.5 bg-tertiary-fixed text-tertiary border border-tertiary/10 rounded-full text-[12px] font-bold">Chain Verification</span>
+</div>
+</div>
+</div>
+<!-- Ambient Glow behind search -->
+<div class="absolute -inset-4 bg-primary/5 blur-3xl rounded-full -z-10 opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Recent Searches -->
+<div class="col-span-2 bg-surface-container-lowest/50 backdrop-blur-2xl p-8 rounded-xl border border-white/30 glass-edge flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">history</span>
+                            Recent Queries
+                        </h3>
+<button class="text-label-caps font-label-caps text-secondary">CLEAR ALL</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Query Item 1 -->
+<div class="flex items-center justify-between p-4 bg-white/40 rounded-2xl hover:bg-white/60 transition-all border border-transparent hover:border-white/50 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="font-body-sm font-bold text-primary">QmXoyp...3p2zR1</p>
+<p class="text-[12px] text-on-surface-variant">Digital Signature Verification • 2 mins ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+<!-- Query Item 2 -->
+<div class="flex items-center justify-between p-4 bg-white/40 rounded-2xl hover:bg-white/60 transition-all border border-transparent hover:border-white/50 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-fixed/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div>
+<p class="font-body-sm font-bold text-primary">bafybe...i25fqa</p>
+<p class="text-[12px] text-on-surface-variant">Asset Metadata Extraction • 45 mins ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+<!-- Query Item 3 -->
+<div class="flex items-center justify-between p-4 bg-white/40 rounded-2xl hover:bg-white/60 transition-all border border-transparent hover:border-white/50 cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">dataset</span>
+</div>
+<div>
+<p class="font-body-sm font-bold text-primary">QmPHn...8rM9uY</p>
+<p class="text-[12px] text-on-surface-variant">Block Audit • 3 hours ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Forensic Intelligence Card -->
+<div class="col-span-1 bg-primary text-on-primary p-8 rounded-xl border border-white/10 glass-edge flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex items-center gap-2 opacity-60">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-label-caps font-label-caps">NETWORK INTEL</span>
+</div>
+<h4 class="font-title-md text-title-md leading-tight">Forensic Node Health &amp; Latency</h4>
+<div class="flex items-end gap-2 mt-4">
+<span class="text-display-lg font-display-lg leading-none">99.9</span>
+<span class="text-title-md font-body-lg opacity-60 mb-1">%</span>
+</div>
+<p class="text-body-sm opacity-60">Distributed validation protocol is operational across 2,400 global nodes.</p>
+</div>
+<div class="relative z-10 mt-8">
+<div class="flex gap-1 h-12 items-end">
+<div class="w-full bg-secondary/80 rounded-t-sm h-[60%] animate-pulse"></div>
+<div class="w-full bg-secondary/60 rounded-t-sm h-[40%]"></div>
+<div class="w-full bg-secondary/90 rounded-t-sm h-[85%]"></div>
+<div class="w-full bg-secondary/70 rounded-t-sm h-[65%]"></div>
+<div class="w-full bg-secondary/80 rounded-t-sm h-[95%]"></div>
+<div class="w-full bg-secondary/50 rounded-t-sm h-[55%]"></div>
+<div class="w-full bg-secondary/90 rounded-t-sm h-[100%]"></div>
+</div>
+</div>
+<!-- Abstract Background Graphic -->
+<div class="absolute -bottom-10 -right-10 w-48 h-48 bg-secondary/10 blur-3xl rounded-full"></div>
+</div>
+</div>
+<!-- System Alerts / Frequent Flags -->
+<div class="bg-white/30 backdrop-blur-xl border border-white/40 p-10 rounded-xl glass-edge flex flex-col md:flex-row items-center justify-between gap-8">
+<div class="flex gap-6 items-center">
+<div class="w-16 h-16 rounded-full bg-error-container flex items-center justify-center text-error border border-error/10">
+<span class="material-symbols-outlined !text-[32px]" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h5 class="font-title-md text-title-md text-primary">Active Forensic Monitoring</h5>
+<p class="text-body-sm text-on-surface-variant">The EviChain AI is currently monitoring for CID collision attacks and unauthorized data mutations in real-time.</p>
+</div>
+</div>
+<button class="bg-white/60 hover:bg-white text-primary border border-primary/10 px-6 py-3 rounded-full font-label-caps text-label-caps transition-all shadow-sm">
+                    VIEW SECURITY LOGS
+                </button>
+</div>
+</section>
+<!-- Footer Visual Polish -->
+<footer class="mt-20 py-12 border-t border-black/5 flex justify-between items-center opacity-40">
+<span class="text-label-caps font-label-caps">EviChain © 2024 Forensic Infrastructure</span>
+<div class="flex gap-6">
+<span class="text-label-caps font-label-caps">ENCRYPTED CONNECTION</span>
+<span class="text-label-caps font-label-caps">SHA-384 ENFORCED</span>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for the search bar
+        const searchContainer = document.querySelector('.search-glow');
+        const input = searchContainer.querySelector('input');
+
+        input.addEventListener('focus', () => {
+            searchContainer.classList.add('scale-[1.01]');
+        });
+
+        input.addEventListener('blur', () => {
+            searchContainer.classList.remove('scale-[1.01]');
+        });
+
+        // Atmospheric parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.body.style.backgroundPosition = `${50 + moveX}% ${50 + moveY}%`;
+        });
+    </script>
+</body></html>

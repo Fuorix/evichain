@@ -1,0 +1,19 @@
+# Environment — NEVER commit secrets
+.env
+.env.local
+
+# Node
+node_modules/
+
+# Hardhat
+artifacts/
+cache/
+typechain-types/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

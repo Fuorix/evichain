@@ -1,0 +1,368 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EviChain | Forensic Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Geist', sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #e2e8e4 0%, #c8d8d4 50%, #dbe4e2 100%);
+            background-attachment: fixed;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.05),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 4px 24px rgba(0, 0, 0, 0.03),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .glass-inner {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .luminous-teal {
+            background: linear-gradient(135deg, #3cddc7 0%, #006b5f 100%);
+            box-shadow: 0 4px 14px rgba(60, 221, 199, 0.4);
+        }
+
+        .luminous-violet {
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            box-shadow: 0 4px 14px rgba(167, 139, 250, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "primary-fixed": "#d8e3fb",
+                        "on-primary-fixed": "#111c2d",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "surface-tint": "#545f73",
+                        "on-secondary-fixed": "#00201c",
+                        "background": "#e2e8e4",
+                        "inverse-primary": "#bcc7de",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#005047",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed-dim": "#bfc8c6",
+                        "outline-variant": "#c5c6cd",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#45474c",
+                        "surface-container": "#eceef0",
+                        "primary": "#091426",
+                        "on-primary-container": "#8590a6",
+                        "tertiary-fixed": "#dbe4e2",
+                        "on-tertiary-fixed": "#151d1c",
+                        "secondary-fixed-dim": "#3cddc7",
+                        "on-secondary-container": "#007165",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-background": "#191c1e",
+                        "on-tertiary-fixed-variant": "#404947",
+                        "secondary": "#006b5f",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bcc7de",
+                        "tertiary-container": "#222a29",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed": "#62fae3",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-container": "#1e293b",
+                        "on-tertiary-container": "#88918f",
+                        "outline": "#75777d",
+                        "on-primary-fixed-variant": "#3c475a",
+                        "secondary-container": "#62fae3",
+                        "on-error-container": "#93000a",
+                        "surface": "rgba(255,255,255,0.4)",
+                        "surface-container-lowest": "rgba(255,255,255,0.6)",
+                        "tertiary": "#0d1614"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "1.5rem",
+                        "container-padding": "2rem",
+                        "section-margin": "3rem",
+                        "card-gap": "1rem"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Geist"],
+                        "body-sm": ["Geist"],
+                        "headline-lg-mobile": ["Geist"],
+                        "headline-lg": ["Geist"],
+                        "body-lg": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "label-caps": ["Geist"]
+                    },
+                    "fontSize": {
+                        "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="text-on-surface">
+<!-- Header (Minimalist & Glass) -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-center py-6 px-gutter">
+<nav class="glass-header rounded-full flex justify-between items-center px-8 py-3 w-full max-w-7xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white" data-icon="fingerprint">fingerprint</span>
+</div>
+<div>
+<h1 class="text-title-md font-bold tracking-tight text-primary leading-none">EviChain</h1>
+<p class="text-[10px] font-label-caps tracking-widest text-primary/70">FORENSIC SUITE</p>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="hidden md:flex gap-8 items-center bg-white/30 px-6 py-2 rounded-full border border-white/40">
+<a class="text-label-caps font-label-caps text-primary border-b-2 border-primary pb-1" href="#">Overview</a>
+<a class="text-label-caps font-label-caps text-primary/60 hover:text-primary transition-colors" href="#">Analytics</a>
+<a class="text-label-caps font-label-caps text-primary/60 hover:text-primary transition-colors" href="#">Reports</a>
+</div>
+<div class="flex items-center gap-2 bg-white/30 p-1 rounded-full border border-white/40">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary/70 hover:bg-white/60 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-primary/70 hover:bg-white/60 transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="flex items-center gap-3 bg-white/40 px-4 py-2 rounded-full border border-white/50">
+<div class="text-right hidden sm:block">
+<p class="text-body-sm font-bold text-primary leading-none">Investigator #892</p>
+<p class="text-[10px] text-primary/60 font-label-caps mt-1 uppercase">Lead Forensic</p>
+</div>
+<img alt="Lead Investigator Avatar" class="w-10 h-10 rounded-full border-2 border-white shadow-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYjYeGso7CPnD5DNLWPGMn-p7jxomG8a7EpNbnixXqWDFUtFV_m4yDkokrWSpcOVgBmb7R2K1Q5j-0Ld6bv2DdVt6VhwMAKPHNlGjygSgyCcoRF61_jc-lo9-C9W1hmwr7FbCMmWS-zpML0DJpn6zxmkYcFzhaokHVqtBA_jfQ1GoMCWd07kEqGpdgPTeyVh8WaPJCSYGmqJy7dp2X0KCKwzL_wKvIhU-0svbY6PbbXkVbJPYRpmvSgxtaG2FQ2q75BD7OdFKDj70">
+</div>
+</div>
+</nav>
+</header>
+<main class="relative pt-32">
+<!-- Hero Section -->
+<section class="relative pb-20 px-gutter md:px-container-padding min-h-[70vh] flex flex-col items-center justify-center text-center">
+<!-- Deep multi-layered background elements -->
+<div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+<div class="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-secondary/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-primary-fixed/20 blur-[100px] rounded-full"></div>
+</div>
+<div class="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+<h1 class="font-display-lg text-display-lg md:text-[64px] text-primary leading-tight tracking-tight">
+                    The Future of Digital Forensics.
+                </h1>
+<p class="font-body-lg text-body-lg text-primary/70 max-w-2xl mx-auto font-medium">
+                    Immutable evidence management powered by blockchain. Secure your chain of custody with forensic-grade integrity and decentralized transparency.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+<button class="luminous-teal text-white px-10 py-4 rounded-full font-bold hover:scale-[1.02] active:scale-95 transition-all">
+                        Connect Wallet
+                    </button>
+<button class="glass-card px-10 py-4 rounded-full font-bold text-primary hover:bg-white/60 transition-all border border-white/80 duration-1000 opacity-100 translate-y-0">
+                        Launch Dashboard
+                    </button>
+</div>
+</div>
+</section>
+<!-- Workflow Section (Modernized) -->
+<section class="py-section-margin px-gutter md:px-container-padding max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg md:text-display-lg text-primary mb-4 tracking-tight">How It Works</h2>
+<p class="font-body-lg text-body-lg text-primary/60 font-medium">The EviChain protocol ensures data integrity through a three-step cryptographic anchor.</p>
+</div>
+<div class="glass-card p-6 md:p-8 rounded-[40px] relative overflow-hidden transition-all duration-1000 opacity-100 translate-y-0">
+<div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 rounded-full blur-[80px]"></div>
+<div class="w-full aspect-[21/9] rounded-[24px] overflow-hidden shadow-2xl relative group mb-12 glass-inner">
+<img alt="Cyber-Forensic Workflow Infographic" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6v4k5cW6WouH4BZMnf8opEwGsBJxODjwgXQzTplG9qv7pl1Omtd17ikZygPAIPPmLfl9zCNpr3Ny-Iw6EE9JvdIhdlXs-18rorPZpWJOiuydjkuGvCpV0PgmixmXHkVOv7vH1diSpVf_q65ed70nbALMPKZ_NzXfDUHt9O7gtE397iVAO8c0IHmxcwI_wMyLiKkTkd9TlKIUJWu6mwurOAC0ufvnXfp9vxEMo63yvnHRxUsqs6m8ffL0gMYxT5TolSkeTEmMvDeI">
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full relative z-10 px-4">
+<div class="space-y-4 text-center glass-inner p-8 rounded-[32px] group hover:bg-white/60 transition-all border-white/40">
+<div class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center font-bold mx-auto shadow-lg shadow-primary/20 transition-transform group-hover:rotate-6">
+<span class="material-symbols-outlined" data-icon="upload_file">upload_file</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary font-bold">Evidence Upload</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">Upload case files and raw data securely to our forensic-ready gateway with military-grade encryption.</p>
+</div>
+<div class="space-y-4 text-center glass-inner p-8 rounded-[32px] group hover:bg-white/60 transition-all border-white/40">
+<div class="w-14 h-14 rounded-2xl luminous-teal text-white flex items-center justify-center font-bold mx-auto shadow-lg transition-transform group-hover:rotate-6">
+<span class="material-symbols-outlined" data-icon="fingerprint">fingerprint</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary font-bold">Hash Computation</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">Our engine generates unique SHA-256 fingerprints to represent the exact state of your digital evidence.</p>
+</div>
+<div class="space-y-4 text-center glass-inner p-8 rounded-[32px] group hover:bg-white/60 transition-all border-white/40">
+<div class="w-14 h-14 rounded-2xl luminous-violet text-white flex items-center justify-center font-bold mx-auto shadow-lg transition-transform group-hover:rotate-6">
+<span class="material-symbols-outlined" data-icon="hub">hub</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary font-bold">Blockchain Anchoring</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">Hashes are permanently committed to the ledger, creating a time-stamped, verifiable proof of existence.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Core Infrastructure (Updated Feature Cards) -->
+<section class="py-section-margin px-gutter md:px-container-padding">
+<div class="max-w-7xl mx-auto">
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg text-primary tracking-tight">Core Infrastructure</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Immutable Ledger -->
+<div class="glass-card p-10 rounded-[32px] space-y-8 hover:-translate-y-2 transition-all group overflow-hidden relative duration-1000 opacity-100 translate-y-0">
+<div class="absolute bottom-[-20%] right-[-10%] w-32 h-32 bg-primary-fixed/30 blur-3xl group-hover:scale-150 transition-transform"></div>
+<div class="w-16 h-16 bg-white/50 rounded-2xl flex items-center justify-center border border-white/60 shadow-inner group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary font-bold mb-3">Immutable Ledger</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">
+                                Every piece of evidence is anchored to a globally distributed ledger, ensuring that once it's recorded, it can never be altered or deleted.
+                            </p>
+</div>
+</div>
+<!-- Decentralized Storage -->
+<div class="glass-card p-10 rounded-[32px] space-y-8 hover:-translate-y-2 transition-all group overflow-hidden relative duration-1000 opacity-100 translate-y-0">
+<div class="absolute bottom-[-20%] right-[-10%] w-32 h-32 bg-secondary/20 blur-3xl group-hover:scale-150 transition-transform"></div>
+<div class="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center border border-secondary/30 shadow-inner group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="cloud_done" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary font-bold mb-3">Decentralized Storage</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">
+                                Redundant archival across peer-to-peer nodes prevents single points of failure and protects against data loss or unauthorized access.
+                            </p>
+</div>
+</div>
+<!-- Real-time Verification -->
+<div class="glass-card p-10 rounded-[32px] space-y-8 hover:-translate-y-2 transition-all group overflow-hidden relative duration-1000 opacity-100 translate-y-0">
+<div class="absolute bottom-[-20%] right-[-10%] w-32 h-32 bg-violet-200/40 blur-3xl group-hover:scale-150 transition-transform"></div>
+<div class="w-16 h-16 bg-violet-100/50 rounded-2xl flex items-center justify-center border border-violet-200/60 shadow-inner group-hover:rotate-12 transition-transform">
+<span class="material-symbols-outlined text-violet-600 text-3xl" data-icon="qr_code_scanner" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary font-bold mb-3">Real-time Verification</h3>
+<p class="font-body-sm text-body-sm text-primary/60 leading-relaxed font-medium">
+                                Instant cryptographic validation tools allow investigators and legal teams to verify evidence authenticity in seconds via simple lookup.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section (Glass Style) -->
+<section class="py-section-margin px-gutter md:px-container-padding max-w-7xl mx-auto">
+<div class="glass-card py-12 px-8 rounded-full grid grid-cols-2 md:grid-cols-4 gap-8 transition-all duration-1000 opacity-100 translate-y-0">
+<div class="text-center">
+<p class="font-display-lg text-primary text-4xl mb-1 tracking-tighter">2.4M+</p>
+<p class="text-[10px] font-label-caps text-primary/50 tracking-widest uppercase">Evidence Anchors</p>
+</div>
+<div class="text-center border-l border-white/20">
+<p class="font-display-lg text-primary text-4xl mb-1 tracking-tighter">100%</p>
+<p class="text-[10px] font-label-caps text-primary/50 tracking-widest uppercase">Uptime Guarantee</p>
+</div>
+<div class="text-center border-l border-white/20">
+<p class="font-display-lg text-primary text-4xl mb-1 tracking-tighter">50ms</p>
+<p class="text-[10px] font-label-caps text-primary/50 tracking-widest uppercase">Hash Resolution</p>
+</div>
+<div class="text-center border-l border-white/20">
+<p class="font-display-lg text-primary text-4xl mb-1 tracking-tighter">12+</p>
+<p class="text-[10px] font-label-caps text-primary/50 tracking-widest uppercase">Global Nodes</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white/20 backdrop-blur-xl py-12 px-gutter md:px-container-padding border-t border-white/40 mt-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start gap-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[16px]" data-icon="fingerprint">fingerprint</span>
+</div>
+<span class="text-title-md font-bold tracking-tight text-primary">EviChain</span>
+</div>
+<p class="text-body-sm text-primary/50 font-medium">© 2024 EviChain Forensic Suite. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-label-caps text-primary/60 hover:text-primary transition-colors font-bold uppercase" href="#">Privacy Policy</a>
+<a class="text-label-caps text-primary/60 hover:text-primary transition-colors font-bold uppercase" href="#">Terms of Service</a>
+<a class="text-label-caps text-primary/60 hover:text-primary transition-colors font-bold uppercase" href="#">Security Audit</a>
+<a class="text-label-caps text-primary/60 hover:text-primary transition-colors font-bold uppercase" href="#">Contact</a>
+</div>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full glass-inner flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+</a>
+<a class="w-10 h-10 rounded-full glass-inner flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+</a>
+</div>
+</div>
+</footer>
+<script>
+        // Smooth reveal on scroll interaction
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(card);
+        });
+    </script>
+
+
+</body></html>

@@ -1,0 +1,35 @@
+{
+  "name": "evichain-backend",
+  "version": "1.0.0",
+  "description": "EviChain Backend — Blockchain-Based Digital Evidence Assurance (BS-DFCS Final Year Project)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node ./node_modules/nodemon/bin/nodemon.js server.js",
+    "deploy:remix": "node scripts/deploy.js",
+    "deploy:chain": "npx hardhat run scripts/hardhat-deploy.cjs --network sepolia",
+    "compile": "npx hardhat compile",
+    "node:local": "npx hardhat node"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "firebase-admin": "^12.7.0",
+    "ethers": "^6.13.2",
+    "evichain-react": "file:../..",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "form-data": "^4.0.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "hardhat": "^2.22.5",
+    "nodemon": "^3.1.4"
+  }
+}

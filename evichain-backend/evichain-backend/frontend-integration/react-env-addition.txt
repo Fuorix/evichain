@@ -1,0 +1,4 @@
+# Add this to your React project's .env file (evichain-react/.env)
+# This tells the frontend where your backend is running
+
+VITE_API_URL=http://localhost:5000/api
