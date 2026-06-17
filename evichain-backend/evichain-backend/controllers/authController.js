@@ -44,12 +44,23 @@ export async function login(req, res, next) {
     let recovered = null;
     const isDevelopment = process.env.NODE_ENV === 'development';
     const isMockMetaMask = req.headers['x-mock-metamask'] === 'true' || process.env.ALLOW_MOCK_SIGNATURES === 'true';
-    
+
     if (isDevelopment && isMockMetaMask) {
       console.log(`[Auth] Development mode: accepting mock signature from ${walletAddress}`);
       recovered = walletAddress; // In dev mode with mock MetaMask, trust the address
     } else {
-      recovered = ethers.verifyMessage(message, signature);
+      try {
+        console.log(`[Auth] Verifying signature for ${walletAddress}`);
+        console.log(`[Auth] Message length: ${message.length}, Signature length: ${signature.length}`);
+        recovered = ethers.verifyMessage(message, signature);
+        console.log(`[Auth] Recovered address: ${recovered}`);
+      } catch (verifyError) {
+        console.error(`[Auth] Signature verification failed:`, verifyError.message);
+        console.error(`[Auth] Wallet: ${walletAddress}`);
+        console.error(`[Auth] Signature: ${signature}`);
+        console.error(`[Auth] Message: ${message}`);
+        throw createError('Invalid signature — please try signing again', 401);
+      }
     }
 
     if (recovered.toLowerCase() !== walletAddress.toLowerCase()) {
